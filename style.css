@@ -168,7 +168,7 @@ h3 { font-size: 12px; }
 }
 .stop { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .stop.flip .shot { order: 2; }
-.num {
+.badge {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1;
   --s: 3px; background: var(--yellow); color: #242a24; font-family: var(--pixel); font-size: 12px;
   padding: 11px 10px; filter: drop-shadow(3px 3px 0 var(--yellow-drop));
@@ -201,7 +201,7 @@ h3 { font-size: 12px; }
   .path::before { left: 18px; }
   .stop { grid-template-columns: 1fr; gap: 14px; padding-left: 46px; }
   .stop.flip .shot { order: 0; }
-  .num { left: 18px; top: 0; transform: translate(-50%, 0); }
+  .badge { left: 18px; top: 0; transform: translate(-50%, 0); }
   .about .in { padding: 16px 14px; }
   .about h3 { font-size: 12px; }
   .stats { gap: 8px 14px; }
