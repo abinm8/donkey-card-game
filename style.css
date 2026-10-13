@@ -1,0 +1,236 @@
+/* Donkey Card Game: one stylesheet for every page, in the game's own pixel
+   look: stepped corners, hard borders and hard drop shadows, never blur. */
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('assets/PressStart2P-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+:root {
+  --cream: #fff6d8;
+  --cream-2: #f3e6bf;
+  --ink: #24594f;
+  --ink-2: #386252;
+  --deep: #08261d;
+  --deep-2: #0c2019;
+  --gold: #e8b84b;
+  --yellow: #ffcc00;
+  --yellow-edge: #493919;
+  --yellow-drop: #795b16;
+  --red: #e5544b;
+  --pixel: 'Press Start 2P', ui-monospace, monospace;
+  --body: ui-rounded, 'SF Pro Rounded', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Stepped corner size for clip-path frames. */
+  --s: 4px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--deep);
+  color: var(--cream);
+  font-family: var(--body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+/* Pixel art scales up crisp, not blurred. */
+.crisp { image-rendering: pixelated; image-rendering: crisp-edges; }
+a { color: var(--gold); }
+
+/* ---------- stepped pixel frame: outer = border colour, inner = fill ---------- */
+.step {
+  clip-path: polygon(
+    calc(var(--s) * 2) 0, calc(100% - var(--s) * 2) 0,
+    calc(100% - var(--s) * 2) var(--s), calc(100% - var(--s)) var(--s),
+    calc(100% - var(--s)) calc(var(--s) * 2), 100% calc(var(--s) * 2),
+    100% calc(100% - var(--s) * 2), calc(100% - var(--s)) calc(100% - var(--s) * 2),
+    calc(100% - var(--s)) calc(100% - var(--s)), calc(100% - var(--s) * 2) calc(100% - var(--s)),
+    calc(100% - var(--s) * 2) 100%, calc(var(--s) * 2) 100%,
+    calc(var(--s) * 2) calc(100% - var(--s)), var(--s) calc(100% - var(--s)),
+    var(--s) calc(100% - var(--s) * 2), 0 calc(100% - var(--s) * 2),
+    0 calc(var(--s) * 2), var(--s) calc(var(--s) * 2),
+    var(--s) var(--s), calc(var(--s) * 2) var(--s)
+  );
+}
+/* A hard drop shadow that follows the stepped outline. */
+.drop { filter: drop-shadow(5px 5px 0 rgba(3, 16, 11, .55)); }
+
+.frame { background: var(--ink); padding: 3px; }
+.frame > .in { background: var(--cream); color: var(--deep); }
+.frame.dark { background: #2f5446; }
+.frame.dark > .in { background: var(--deep-2); color: var(--cream); }
+.frame.gold { background: var(--gold); }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-block;
+  font-family: var(--pixel);
+  font-size: 12px;
+  letter-spacing: .5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: transform .06s;
+}
+.btn:active { transform: translate(3px, 3px); }
+.btn .face { display: block; padding: 16px 22px; }
+.btn.primary { background: var(--yellow-edge); padding: 3px; }
+.btn.primary .face {
+  background: var(--yellow);
+  color: #242a24;
+  box-shadow: inset 0 3px 0 #ffe878, inset 0 -3px 0 #dea400;
+}
+.btn.secondary { background: var(--ink); padding: 3px; }
+.btn.secondary .face { background: var(--cream); color: var(--ink); }
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 12px 20px;
+  background: var(--deep);
+  border-bottom: 3px solid #2f5446;
+}
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--cream); }
+.brand img { width: 36px; height: 36px; border: 3px solid var(--gold); }
+.brand span { font-family: var(--pixel); font-size: 12px; }
+.nav { display: flex; gap: 18px; flex-wrap: wrap; }
+.nav a {
+  font-family: var(--pixel); font-size: 10px; color: var(--cream);
+  text-decoration: none; padding: 6px 2px; border-bottom: 3px solid transparent;
+}
+.nav a:hover, .nav a[aria-current] { border-bottom-color: var(--gold); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  min-height: min(92vh, 760px);
+  display: grid; place-items: center;
+  padding: 72px 20px 56px;
+  /* Shifted right of centre so the donkey on his stool stays in view. */
+  background: var(--cream) url('assets/welcome-background.webp') 78% bottom / cover no-repeat;
+  overflow: hidden;
+  text-align: center;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 720px; }
+.hero .title { width: min(560px, 86vw); margin: 0 auto; animation: float 2.8s ease-in-out infinite; }
+.hero .tagline {
+  font-family: var(--pixel);
+  font-size: clamp(9px, 1.6vw, 12px);
+  line-height: 2;
+  color: var(--ink);
+  margin: 22px auto 30px;
+  max-width: 560px;
+  text-shadow: 2px 2px 0 rgba(255, 246, 216, .8);
+}
+.hero .ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.soon {
+  display: inline-block; margin-top: 18px;
+  font-family: var(--pixel); font-size: 9px; color: var(--ink-2);
+  background: rgba(255, 246, 216, .85); padding: 8px 12px;
+}
+@keyframes float { 50% { transform: translateY(-8px); } }
+
+/* ---------- sections ---------- */
+section { padding: 84px 20px; scroll-margin-top: 72px; }
+.wrap { max-width: 1060px; margin: 0 auto; }
+.kicker {
+  font-family: var(--pixel); font-size: 10px; color: var(--gold);
+  letter-spacing: 1px; margin: 0 0 14px;
+}
+h1, h2, h3 { font-family: var(--pixel); font-weight: normal; line-height: 1.5; margin: 0 0 18px; }
+h2 { font-size: clamp(16px, 2.6vw, 24px); }
+h3 { font-size: 12px; }
+.lead { font-size: 18px; max-width: 640px; color: #e9dfc0; }
+
+/* The game in three steps. */
+.steps { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 36px; }
+.steps .in { padding: 24px; height: 100%; }
+.steps .num {
+  font-family: var(--pixel); font-size: 22px; color: var(--yellow);
+  text-shadow: 3px 3px 0 var(--yellow-drop);
+}
+.steps p { margin: 8px 0 0; color: var(--ink-2); font-size: 16px; }
+.steps h3 { color: var(--deep); margin-top: 14px; }
+
+/* Five tables. */
+.tables { background: var(--cream) url('assets/journey-background.webp') center / cover no-repeat; }
+.tables .heading { background: rgba(255, 246, 216, .9); display: inline-block; padding: 18px 22px; }
+.tables .heading h2, .tables .heading .kicker { color: var(--ink); }
+.tables .heading p { margin: 0; color: var(--ink-2); max-width: 560px; }
+.table-grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin-top: 32px; }
+.table-card .in { overflow: hidden; height: 100%; display: flex; flex-direction: column; }
+.table-card .cover { position: relative; aspect-ratio: 3 / 2; }
+.table-card .cover img { width: 100%; height: 100%; object-fit: cover; }
+.table-card .level {
+  position: absolute; top: 10px; left: 10px;
+  font-family: var(--pixel); font-size: 8px; color: var(--cream);
+  background: rgba(0, 0, 0, .65); padding: 5px 7px;
+}
+.table-card .hard { background: var(--red); left: auto; right: 10px; }
+.table-card .body { padding: 14px 14px 16px; background: #194c40; color: var(--cream); flex: 1; }
+.table-card h3 { font-size: 11px; margin: 0 0 10px; }
+.cast { display: flex; gap: 6px; }
+.cast img { width: 38px; height: 38px; border: 2px solid var(--gold); background: var(--cream); }
+
+/* The regulars, standing. */
+.regulars { background: var(--deep-2); }
+.lineup {
+  display: flex; align-items: flex-end; justify-content: space-evenly; gap: 1%;
+  /* The five figures together are about 2.9x as wide as the row is tall, so
+     28vw tall always fits the page width, at one shared height. */
+  margin-top: 30px; height: min(330px, 28vw); overflow: hidden;
+  border-bottom: 6px solid #2f5446;
+}
+.lineup img { height: 112%; width: auto; transform: translateY(10%); animation: bob 3s ease-in-out infinite; }
+.lineup img:nth-child(2) { animation-delay: -.6s; }
+.lineup img:nth-child(3) { animation-delay: -1.2s; }
+.lineup img:nth-child(4) { animation-delay: -1.8s; }
+.lineup img:nth-child(5) { animation-delay: -2.4s; }
+@keyframes bob { 50% { transform: translateY(7%); } }
+
+/* Feature tiles. */
+.features { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 30px; }
+.features .in { padding: 20px; height: 100%; }
+.features h3 { color: var(--gold); font-size: 10px; }
+.features p { margin: 0; color: #d9cfae; }
+
+/* Closing call to action. */
+.closer { text-align: center; background: linear-gradient(var(--deep), #12382c); }
+.closer img.face { width: 120px; margin: 0 auto 18px; }
+
+/* ---------- document pages (privacy, support) ---------- */
+.doc { background: var(--cream); color: var(--deep); padding: 60px 20px 90px; }
+.doc .paper { max-width: 780px; margin: 0 auto; }
+.doc .paper > .in { padding: clamp(22px, 5vw, 48px); }
+.doc h1 { font-size: clamp(16px, 3vw, 24px); color: var(--ink); }
+.doc h2 { font-size: 13px; color: var(--ink); margin-top: 34px; }
+.doc p, .doc li { font-size: 17px; color: #22413a; }
+.doc .updated { font-family: var(--pixel); font-size: 9px; color: var(--ink-2); }
+.doc .note { background: var(--cream-2); padding: 14px 16px; border-left: 4px solid var(--gold); }
+.doc details { border-top: 3px dashed #d9c99a; padding: 14px 0; }
+.doc summary { cursor: pointer; font-family: var(--pixel); font-size: 11px; color: var(--ink); line-height: 1.8; }
+.doc details p { margin: 12px 0 0; }
+
+/* ---------- footer ---------- */
+footer {
+  background: var(--deep-2); border-top: 3px solid #2f5446;
+  padding: 32px 20px; text-align: center; color: #a7b8ad; font-size: 14px;
+}
+footer .links { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+footer .links a { font-family: var(--pixel); font-size: 9px; color: var(--cream); text-decoration: none; }
+footer .links a:hover { color: var(--gold); }
+
+@media (max-width: 640px) {
+  /* On a phone the bar scrolls away, and the menu fits on one line. */
+  .topbar { position: static; flex-direction: column; gap: 6px; padding: 10px 12px; }
+  .nav { gap: 12px; justify-content: center; }
+  .nav a { font-size: 8px; }
+  section { padding: 64px 16px; }
+  .hero { padding: 48px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero .title, .lineup img { animation: none; }
+}
