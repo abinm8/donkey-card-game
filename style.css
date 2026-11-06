@@ -125,7 +125,7 @@ a { color: var(--gold); }
   max-width: 560px;
   text-shadow: 2px 2px 0 rgba(255, 246, 216, .8);
 }
-.hero .ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 .soon {
   display: inline-block; margin-top: 18px;
   font-family: var(--pixel); font-size: 9px; color: var(--ink-2);
