@@ -147,11 +147,13 @@
 
     <section class="regulars" id="regulars">
       <div class="wrap">
-        <p class="kicker">THE REGULARS</p>
-        <h2>Twenty characters. Zero mercy.</h2>
-        <p class="lead">Every table has its own four regulars, and every one of them plays differently. Pick a table and meet who you’re up against.</p>
+        <p class="kicker">TWENTY CHARACTERS. ZERO MERCY.</p>
+        <h2>Meet the regulars</h2>
+        <p class="lead">Every table has its own four regulars, and every one of them plays differently. Pick a table, then step through who you’re up against.</p>
         <div class="tabs" role="tablist" aria-label="Tables"><button class="tab step" role="tab" id="tab-0" aria-controls="panel-0" aria-selected="true"><span class="step">Amma Veedu</span></button><button class="tab step" role="tab" id="tab-1" aria-controls="panel-1" aria-selected="false"><span class="step">Arts &amp; Sports Club</span></button><button class="tab step" role="tab" id="tab-2" aria-controls="panel-2" aria-selected="false"><span class="step">Chaaya Kada</span></button><button class="tab step" role="tab" id="tab-3" aria-controls="panel-3" aria-selected="false"><span class="step">Kandam</span></button><button class="tab step" role="tab" id="tab-4" aria-controls="panel-4" aria-selected="false"><span class="step">Kallu Shaap</span></button></div>
-        <div class="panel" role="tabpanel" id="panel-0" aria-labelledby="tab-0"><article class="who frame dark step drop"><div class="in step">
+        <div class="show">
+        <button class="arrow prev" aria-label="Previous character"><span>&lt;</span></button>
+        <div class="panels"><div class="panel" role="tabpanel" id="panel-0" aria-labelledby="tab-0"><article class="who frame dark step drop"><div class="in step">
             <div class="stage"><img class="crisp" src="assets/figures/appu.webp" alt="Appu" loading="lazy"></div>
             <div class="info"><h3>Appu</h3><span class="trait step">The Ringleader</span><p>Loud, cheeky and always first to point at the loser.</p><p class="quote">“Loser does my homework!”</p></div>
           </div></article><article class="who frame dark step drop"><div class="in step">
@@ -216,7 +218,11 @@
             <div class="stage"><img class="crisp" src="assets/figures/kuttan.webp" alt="Kuttan" loading="lazy"></div>
             <div class="info"><h3>Kuttan</h3><span class="trait step">The Banker</span><p>Counts the notes and makes sure the loser pays.</p><p class="quote">“Loser pays the bill.”</p></div>
           </div></article></div>
-        
+        </div>
+        <button class="arrow next" aria-label="Next character"><span>&gt;</span></button>
+        <p class="count" aria-live="polite"></p>
+        </div>
+
         <div class="features">
           <div class="frame dark step"><div class="in step"><h3>Hardcore mode</h3><p>At the Kallu Shaap nothing is enforced. Lie about your suit, play out of turn, and call a cheat if you catch one.</p></div></div>
           <div class="frame dark step"><div class="in step"><h3>Smart opponents</h3><p>Bots only see what a real player would. The higher the table, the more carefully they count the cards.</p></div></div>
@@ -243,16 +249,28 @@
     <p>© 2026 Donkey Card Game. Made with love in Keralam.</p>
   </footer>
   <script>
-    // Table tabs for the regulars: show one table's four at a time.
+    // The regulars, one at a time: the arrows step through all twenty, and a
+    // table's tab jumps to its first regular.
     const tabs = [...document.querySelectorAll('.tab')];
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => {
+    const who = [...document.querySelectorAll('.who')];
+    const count = document.querySelector('.count');
+    let at = 0;
+    function show(i) {
+      at = (i + who.length) % who.length;
+      const table = Math.floor(at / 4);
+      who.forEach((w, j) => { w.hidden = j !== at; });
       tabs.forEach((t, j) => {
-        t.setAttribute('aria-selected', String(i === j));
-        document.getElementById('panel-' + j).hidden = i !== j;
+        t.setAttribute('aria-selected', String(j === table));
+        document.getElementById('panel-' + j).hidden = j !== table;
       });
-    }));
-    // "Meet them" on a table opens that table's tab in the regulars.
-    document.querySelectorAll('.meet').forEach(a => a.addEventListener('click', () => tabs[a.dataset.tab].click()));
+      count.textContent = (at + 1) + ' / ' + who.length;
+    }
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => show(i * 4)));
+    document.querySelector('.arrow.prev').addEventListener('click', () => show(at - 1));
+    document.querySelector('.arrow.next').addEventListener('click', () => show(at + 1));
+    // "Meet them" on a table opens that table's first regular.
+    document.querySelectorAll('.meet').forEach(a => a.addEventListener('click', () => show(a.dataset.tab * 4)));
+    show(0);
   </script>
 </body>
 </html>

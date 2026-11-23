@@ -217,21 +217,36 @@ h3 { font-size: 12px; }
 .tab[aria-selected="true"] { background: var(--yellow-edge); }
 .tab[aria-selected="true"] span { background: var(--yellow); color: #242a24; }
 .tab:active { transform: translate(2px, 2px); }
-.panel { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
-.panel[hidden] { display: none; }
-.who .in { height: 100%; display: flex; flex-direction: column; }
+/* One regular at a time, an arrow either side. */
+.show {
+  display: grid; gap: 16px; align-items: center;
+  grid-template-columns: auto minmax(0, 720px) auto; justify-content: center;
+  grid-template-areas: "prev card next" ". count .";
+}
+.panels { grid-area: card; }
+.panel[hidden], .who[hidden] { display: none; }
+.arrow { border: 0; cursor: pointer; background: var(--yellow-edge); padding: 3px; font-family: var(--pixel); font-size: 14px; }
+.arrow span { display: block; padding: 14px 16px; background: var(--yellow); color: #242a24; }
+.arrow:active { transform: translate(2px, 2px); }
+.arrow.prev { grid-area: prev; }
+.arrow.next { grid-area: next; }
+.count { grid-area: count; margin: 0; text-align: center; font-family: var(--pixel); font-size: 9px; color: #a7b8ad; }
+.who .in { display: flex; }
 /* The full figure, standing on a pixel floor. */
 .who .stage {
-  height: 240px; display: flex; align-items: flex-end; justify-content: center;
+  flex: 0 0 45%; height: 320px; display: flex; align-items: flex-end; justify-content: center;
   padding: 18px 10px 0;
   background: linear-gradient(transparent 82%, #2f5446 82%, #2f5446 86%, #1d3a30 86%);
 }
 .who .stage img { max-height: 100%; width: auto; animation: bob 3s ease-in-out infinite; }
-.who:nth-child(2) .stage img { animation-delay: -.75s; }
-.who:nth-child(3) .stage img { animation-delay: -1.5s; }
-.who:nth-child(4) .stage img { animation-delay: -2.25s; }
 @keyframes bob { 50% { transform: translateY(-5px); } }
-.who .info { padding: 16px 18px 20px; }
+@media (max-width: 640px) {
+  /* Phone: the card full width, the arrows under it either side of the count. */
+  .show { grid-template-columns: auto 1fr auto; grid-template-areas: "card card card" "prev count next"; }
+  .who .in { flex-direction: column; }
+  .who .stage { flex-basis: auto; height: 240px; }
+}
+.who .info { padding: 16px 18px 20px; align-self: center; }
 .who h3 { font-size: 13px; color: var(--cream); margin: 0 0 10px; }
 .trait {
   display: inline-block; font-family: var(--pixel); font-size: 8px; line-height: 1.6;
